@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدخال تطبيق جديد</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            width: 400px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="url"], select, textarea {
+            width: 100%;
+            padding: 8px 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #fff;
+        }
+        button.submit {
+            background-color: #28a745;
+        }
+        button.reset {
+            background-color: #dc3545;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>إدخال تطبيق جديد</h2>
+        <form id="appForm">
+            <label for="appName">اسم التطبيق:</label>
+            <input type="text" id="appName" name="appName" placeholder=": MyApp">
+            <div class="error" id="appNameError"></div>
+
+            <label for="company">الشركة المصنعة:</label>
+            <input type="text" id="company" name="company" placeholder=": TechCorp">
+            <div class="error" id="companyError"></div>
+
+            <label for="website">الموقع الإلكتروني:</label>
+            <input type="url" id="website" name="website" placeholder="http://example.com">
+            <div class="error" id="websiteError"></div>
+
+            <label for="free">مجاني أم لا:</label>
+            <select id="free" name="free">
+                <option value="">اختر...</option>
+                <option value="Yes">نعم</option>
+                <option value="No">لا</option>
+            </select>
+            <div class="error" id="freeError"></div>
+
+            <label for="field">مجال الاستخدام:</label>
+            <select id="field" name="field">
+                <option value="">اختر...</option>
+                <option value="E-Commerce">التجارة الإلكترونية</option>
+                <option value="Education">التعليم</option>
+                <option value="Robotics">الروبوتات</option>
+                <option value="Healthcare">الرعاية الصحية</option>
+                <option value="Entertainment">الترفيه</option>
+            </select>
+            <div class="error" id="fieldError"></div>
+
+            <label for="description">شرح مختصر عن التطبيق:</label>
+            <textarea id="description" name="description" placeholder="اكتب وصفاً مختصراً"></textarea>
+            <div class="error" id="descriptionError"></div>
+
+            <div class="buttons">
+                <button type="button" class="submit" onclick="submitForm()">إرسال</button>
+                <button type="reset" class="reset">إعادة</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+       function submitForm() {
+    // جمع البيانات من الحقول
+    const appName = document.getElementById('appName').value.trim();
+    const company = document.getElementById('company').value.trim();
+    const website = document.getElementById('website').value.trim();
+    const free = document.getElementById('free').value;
+    const field = document.getElementById('field').value;
+    const description = document.getElementById('description').value.trim();
+
+    // إنشاء الكائن
+    const appData = { appName, company, website, free, field, description };
+
+    // قراءة التطبيقات السابقة من localStorage
+    let apps = JSON.parse(localStorage.getItem('apps') || '[]');
+
+    // إضافة التطبيق الجديد
+    apps.push(appData);
+
+    // حفظ القائمة الجديدة في localStorage
+    localStorage.setItem('apps', JSON.stringify(apps));
+
+    // الانتقال إلى صفحة التطبيقات بعد الحفظ
+    window.location.href = 'APPS.html';
+}
+    </script>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <script
+     src="https://code.jquery.com/jquery-3.6.0.min.js">
+    </script>
+</head>
+<style>
+  h1{
+    color: #400ed6;
+  }
+    body {
+      direction: rtl;
+      font-family: "Tahoma", sans-serif;
+    }
+
+    table {
+      width: 90%;
+      margin: 40px auto;
+      border-collapse: collapse;
+      background-color: #ffffff9a;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    th{
+      color: #400ed6;
+    background-color: #93d5f8; 
+    }
+
+    button {
+      background-color: #0011ff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 12px 12px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0044ff;
+    }
+
+    .details {
+      display: none;
+      background: #fafafa;
+      border: 5px solid #ddd;
+      margin-top: 30px;
+      padding: 30px;
+      border-radius: 9px;
+    }
+  </style>
+<body>
+    <h1 style="text-align: center;">صفحة التطبيقات</h1>
+    <table id="appsTable">
+      <thead>
+        <tr>
+            <th>اسم التطبيق</th>
+            <th>اسم الشركة المطورة</th>
+            <th>مجال الاستخدام</th>
+            <th>مجاني \ غير مجاني</th>
+            <th>عرض التفاصيل</th>
+            <th>اختيار</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+            <td>Amazon Shopping</td>
+            <td>Amazon</td>
+            <td>يُستخدم تطبيق أمازون بشكل رئيسي في التجارة الإلكترونية لشراء وبيع المنتجات، بالإضافة إلى الترفيه عبر خدمات مثل برايم فيديو وميوزك، والمحتوى والتعاون عبر خدمات أمازون ويب (AWS) مثل Amazon WorkDocs، وكذلك في التسويق والإعلانات من خلال Amazon Ads وAmazon Associates لتقديم حلول للشركات</td>
+            <td><button onclick="toggleExplanation('exp1')"></button></td>
+      <td>
+        <div id="exp1" class="details">
+          تطبيق للتسوق عبر الإنترنت تابع لشركة Amazon يتيح شراء المنتجات وشحنها إلى أي مكان ولكن قد يتيح تطبيق Amazon بعض التطبيقات دون رسوم وبعضها الاخر بمقابل .
+          <p><a href="https://www.amazon.com">اذهب الى الموقع الرسمي لتطبيق Amazon</a></p>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="30" height="30" role="img" aria-label="Amazon App Icon">
+            <title>Amazon App Icon</title>
+            <rect width="64" height="64" rx="12" fill="#232f3e"/>
+            <path d="M20 44 L28 20 L36 20 L44 44 L38 44 L35 36 H29 L26 44 Z" fill="#ffffff"/>
+            <path d="M18 46 C30 56, 46 56, 54 46" stroke="#ff9900" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M49 44 L55 46 L50 51" stroke="#ff9900" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <td><input type="checkbox"></td>
+        </tr>
+        <tr>
+            <td>copilot</td>
+            <td>Microsoft</td>
+            <td>يساعد copilot الأشخاص من خلال: تحسين الإنتاجية. أكمل المهام بشكل أسرع باستخدام الاقتراحات الذكية لـ copilot، مما يجعل إنشاء المحتوى وتحليل البيانات والتواصل أكثر فعالية. تبسيط التنفيذ التلقائي. يمكن لـ copilot تنفيذ المهام المتكررة تلقائياً، بدون الحاجة إلى الترميز.</td>
+            <td><button onclick="toggleExplanation('exp2')"></button></td>
+      <td>
+        <div id="exp2" class="details">
+          منصة تواصل اجتماعي تتيح مشاركة الصور والمنشورات والتفاعل مع الأصدقاء وهو تطبيق مجاني.
+          <p><a href="https://www.copilot.com">اذهب الى الموقع الرسمي لتطبيق Copilot</a></p>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="30" height="30" role="img" aria-label="Copilot App Icon">
+            <title>Copilot Icon</title>
+            <rect width="64" height="64" rx="12" fill="#0f1724"/>
+            <path d="M46 16a20 20 0 1 0 0 32" fill="none" stroke="url(#grad1)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M38 26 L48 32 L38 38" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="grad1" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0" stop-color="#06b6d4"/>
+                <stop offset="1" stop-color="#7c3aed"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <td><input type="checkbox"></td>
+        </tr>
+        <tr>
+            <td>Nvidia share</td>
+            <td>NVIDIA</td>
+            <td>اللعبة وبرامج التشغيل من مكان واحد ، مع تقديم طبقة جديدة داخل اللعبة لتسهيل الوصول إلى التسجيل القوي ومراقبة الأداء ومرشحات اللعبة</td>
+            <td><button onclick="toggleExplanation('exp3')"> </button></td>
+      <td>
+        <div id="exp3" class="details">
+          خدمة تخزين سحابي تتيح حفظ الملفات ومشاركتها عبر الإنترنت وهو مجاني تماما.
+          <p><a href="https://www.Nvidia share.com">اذهب الى الموقع الرسمي لتطبيق Nvidia share</a></p>
+          <!-- nvidia-share-icon.svg -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="30" height="30" role="img" aria-label="NVIDIA Share style icon">
+            <title>NVIDIA Share Icon</title>
+            <rect width="64" height="64" rx="12" fill="#0a0f0a"/>
+            <circle cx="32" cy="28" r="16" fill="#00b84d" opacity="0.95"/>
+            <path d="M24 28 C28 22, 36 22, 40 28" fill="none" stroke="#0a0f0a" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M22 28 C28 18, 36 18, 42 28" fill="none" stroke="#0a0f0a" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+            <circle cx="36" cy="28" r="4" fill="#0a0f0a"/>
+            <circle cx="36" cy="28" r="2" fill="#00ff6a"/>
+            <rect width="64" height="64" rx="12" fill="none" stroke="#00ff6a" stroke-width="0.5" opacity="0.3"/>
+          </svg>
+        </div>
+        <td><input type="checkbox"></td>
+        </tr>
+        <tr>
+            <td>Facebook</td>
+            <td>Meta</td>
+            <td>يستخدم تطبيق فيسبوك في مجالات متنوعة تشمل التواصل الاجتماعي الشخصي، والتسويق والإعلانات للشركات، والتعليم والتعلم التعاوني، والعلاقات العامة، وحتى في جمع التبرعات للأعمال والمشاريع. تتضمن الاستخدامات الرئيسية التواصل مع الأصدقاء والعائلة، وإنشاء صفحات للأنشطة التجارية، ونشر المحتوى الثقافي والفني، وتقديم الدعم الفني للعملاء عبر روبوتات الدردشة.</td>
+            <td><button onclick="toggleExplanation('exp4')"> </button></td>
+      <td>
+        <div id="exp4" class="details">
+          موقع الكتروني مجاني عبر الانترنت خاص بالتواصل الاجتماعي , حيث يتمكن المستخدم من خلاله من التواصل والتفاعل مع الاصدقاء والعائلة وهو مجاني تماما.
+          <p><a href="https://www.facebook.com">اذهب الى الموقع الرسمي لتطبيق Facebook</a></p>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="30" height="30" role="img" aria-label="Facebook-style icon">
+            <title>Facebook Style Icon</title>
+            <rect width="64" height="64" rx="12" fill="#1877F2"/>
+            <path d="M36 20h8v-8h-8c-6.6 0-12 5.4-12 12v8h-8v8h8v12h8V40h8l2-8h-10v-8c0-2.2 1.8-4 4-4z"
+                  fill="#ffffff"/>
+          </svg>
+        </div>
+        <td><input type="checkbox"></td>
+        </tr>
+        <tr>
+            <td>Deepseek</td>
+            <td>Tencent</td>
+            <td>يمكن استخدام DeepSeek في العديد من المجالات المختلفة، مما يجعله أداة مفيدة لكل من الأفراد والشركات:
+المساعدة الشخصية
+لتعليم والتدريب
+إدارة الأعمال تحليل البيانات</td>
+<td><button onclick="toggleExplanation('exp5')"></button></td>
+      <td>
+          <div id="exp5" class="details">
+          هي اداة دردشة تعتمد على الذكاء الاصطناعي وتستخدم نموذج التعلم الذاتي المعزز وتعمل على نهج مزيج الخبراء وهو مجاني تماما.
+          <p><a href="https://www.DeepSeek.com">اذهب الى الموقع الرسمي لتطبيق DeepSeek</a></p>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="30" height="30" role="img" aria-label="Deepseek Icon">
+            <title>Deepseek Icon</title>
+            <circle cx="32" cy="32" r="30" fill="#0f172a"/>
+            <circle cx="26" cy="26" r="12" fill="none" stroke="#38bdf8" stroke-width="4"/>
+            <line x1="34" y1="34" x2="46" y2="46" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
+            <path d="M18 24 C22 20, 28 20, 32 24" stroke="#38bdf8" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M20 28 C25 24, 30 24, 34 28" stroke="#38bdf8" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M22 32 C27 28, 32 28, 36 32" stroke="#38bdf8" stroke-width="2" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <td><input type="checkbox"></td>
+        </tr>
+      </tbody>
+    </table>
+   <script>
+function toggleExplanation(id){
+  const el = document.getElementById(id);
+  if (el.style.display === "none" || el.style.display === "") {
+    el.style.display = "block";
+  } else {
+    el.style.display = "none";
+  }
+}
+// قراءة التطبيقات من localStorage
+        let apps = JSON.parse(localStorage.getItem('apps') || '[]');
+
+        // التحقق إذا كان هناك أي تطبيقات
+        if (apps.length > 0) {
+            const table = document.querySelector("table");
+
+            apps.forEach(app => {
+    const row = table.insertRow();
+    row.innerHTML = `
+        <td>${app.appName}</td>
+        <td>${app.company}</td>
+        <td><a href="${app.website}" target="_blank">${app.website}</a></td>
+        <td>${app.free === "Yes" ? "نعم" : "لا"}</td>
+        <td>${app.field}</td>
+        <td>${app.description}</td>
+    `;
+});
+        } else {
+            // إذا لم يكن هناك أي تطبيقات، نعرض رسالة للمستخدم
+            const table = document.querySelector("table");
+            const row = table.insertRow();
+            const cell = row.insertCell(0);
+            cell.colSpan = 6;
+            cell.style.textAlign = "center";
+        }
+</script>
+</body>
+</html>

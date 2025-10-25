@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>قائمة التطبيقات</title>
+  <style>
+    :root{
+      --bg:#f6f9fc;
+      --card:#ffffff;
+      --accent:#2563eb;
+      --danger:#e63946;
+      --muted:#6b7280;
+      --shadow: 0 6px 18px rgba(16,24,40,0.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background:var(--bg);
+      color:#0f172a;
+      padding:24px;
+      min-height:100vh;
+    }
+    header{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:18px;
+    }
+    h1{margin:0;font-size:20px}
+    .controls{
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .btn{
+      padding:8px 12px;
+      border-radius:8px;
+      border:none;
+      cursor:pointer;
+      font-weight:600;
+    }
+    .btn.primary{background:var(--accent); color:white; box-shadow:var(--shadow)}
+    .btn.outline{background:transparent; border:1px solid rgba(15,23,42,0.06); color:var(--accent)}
+    .btn.danger{background:var(--danger); color:white}
+    .search{
+      padding:8px 12px;
+      border-radius:10px;
+      border:1px solid #e6edf8;
+      width:260px;
+      direction:ltr;
+    }
+
+    main{
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
+      gap:16px;
+    }
+
+    .card{
+      background:var(--card);
+      padding:14px;
+      border-radius:12px;
+      box-shadow: var(--shadow);
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .card .title{
+      font-weight:700;
+      font-size:16px;
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      align-items:center;
+    }
+    .meta{font-size:13px;color:var(--muted)}
+    .desc{font-size:14px;color:#0f172a; margin-top:6px; white-space:pre-wrap}
+    .card .row{
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      align-items:center;
+    }
+    .small{
+      font-size:12px;
+      color:var(--muted);
+    }
+    .actions{
+      display:flex;
+      gap:8px;
+      margin-top:8px;
+      justify-content:flex-start;
+    }
+
+    /* empty */
+    .empty{
+      grid-column:1/-1;
+      background:linear-gradient(90deg,#fff,#fbfdff);
+      padding:28px;
+      border-radius:12px;
+      text-align:center;
+      color:var(--muted);
+      box-shadow:var(--shadow);
+    }
+
+    /* modal (edit) */
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(2,6,23,0.45);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:50;
+    }
+    .modal{
+      width:520px;
+      max-width:95%;
+      background:#fff;
+      border-radius:12px;
+      padding:16px;
+      box-shadow:0 18px 50px rgba(2,6,23,0.4);
+    }
+    .modal h3{margin:0 0 8px 0}
+    .form-row{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+    .form-row.full{grid-template-columns:1fr}
+    label{font-size:13px;color:var(--muted); display:block; margin-bottom:6px}
+    input[type="text"], input[type="url"], select, textarea{
+      width:100%; padding:8px 10px; border-radius:8px; border:1px solid #e6edf8; font-size:14px;
+    }
+    textarea{min-height:80px; resize:vertical}
+    .modal .actions {justify-content:flex-end; margin-top:12px}
+
+    /* responsive */
+    @media (max-width:640px){
+      .form-row{grid-template-columns:1fr}
+      header{flex-direction:column; align-items:stretch; gap:12px}
+      .controls{justify-content:space-between}
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>عرض التطبيقات</h1>
+      <div class="small">الطلبات المحفوظة مؤقتًا في المتصفح (localStorage)</div>
+    </div>
+
+    <div class="controls">
+      <input id="q" class="search" placeholder="ابحث باسم التطبيق أو الشركة..." />
+      <button class="btn outline" id="toAdd">إضافة تطبيق جديد</button>
+      <button class="btn danger" id="clearAll">حذف الكل</button>
+    </div>
+  </header>
+
+  <main id="grid">
+    <!-- البطاقات ستُدرج هنا -->
+  </main>
+
+  <!-- قالب بطاقة فارغ يظهر عند عدم وجود بيانات -->
+  <template id="emptyTpl">
+    <div class="empty">
+      <p><strong>لا يوجد تطبيقات مسجلة</strong></p>
+      <p>يمكنك النقر على "إضافة تطبيق جديد" لإدخال أول تطبيق.</p>
+    </div>
+  </template>
+
+  <!-- Modal للتعديل -->
+  <div class="modal-backdrop" id="modal">
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3>تعديل التطبيق</h3>
+      <div id="formErrors" class="small" style="color:#b02a37"></div>
+
+      <div style="height:8px"></div>
+      <div class="form-row">
+        <div>
+          <label for="m_appName">اسم التطبيق</label>
+          <input id="m_appName" type="text" placeholder="مثال: MyApp">
+        </div>
+        <div>
+          <label for="m_company">الشركة المصنعة</label>
+          <input id="m_company" type="text" placeholder="مثال: TechCorp">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div>
+          <label for="m_website">الموقع الإلكتروني (URL)</label>
+          <input id="m_website" type="url" placeholder="https://example.com">
+        </div>
+        <div>
+          <label for="m_free">مجاني أم لا</label>
+          <select id="m_free">
+            <option value="">اختر...</option>
+            <option value="Yes">نعم</option>
+            <option value="No">لا</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div>
+          <label for="m_field">مجال الاستخدام</label>
+          <select id="m_field">
+            <option value="">اختر...</option>
+            <option value="E-Commerce">التجارة الإلكترونية</option>
+            <option value="Education">التعليم</option>
+            <option value="Robotics">الروبوتات</option>
+            <option value="Healthcare">الرعاية الصحية</option>
+            <option value="Entertainment">الترفيه</option>
+          </select>
+        </div>
+        <div>
+          <label for="m_dummy">&nbsp;</label>
+          <div style="height:40px"></div>
+        </div>
+      </div>
+
+      <div class="form-row full" style="margin-top:8px">
+        <div>
+          <label for="m_description">شرح مختصر</label>
+          <textarea id="m_description" placeholder="وصف التطبيق..."></textarea>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn outline" id="closeModal">إلغاء</button>
+        <button class="btn primary" id="saveChanges">حفظ</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // مفتاح التخزين نفسه المستخدم في add_app.html
+    const STORAGE_KEY = 'apps';
+
+    // عناصر DOM
+    const grid = document.getElementById('grid');
+    const q = document.getElementById('q');
+    const toAdd = document.getElementById('toAdd');
+    const clearAll = document.getElementById('clearAll');
+    const emptyTpl = document.getElementById('emptyTpl');
+
+    // modal elements
+    const modal = document.getElementById('modal');
+    const m_appName = document.getElementById('m_appName');
+    const m_company = document.getElementById('m_company');
+    const m_website = document.getElementById('m_website');
+    const m_free = document.getElementById('m_free');
+    const m_field = document.getElementById('m_field');
+    const m_description = document.getElementById('m_description');
+    const saveChanges = document.getElementById('saveChanges');
+    const closeModal = document.getElementById('closeModal');
+    const formErrors = document.getElementById('formErrors');
+
+    let apps = [];
+    let editingIndex = null;
+
+    // load from localStorage
+    function loadApps(){
+      apps = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    }
+
+    function saveApps(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(apps));
+    }
+
+    function render(){
+      grid.innerHTML = '';
+      const filter = q.value.trim().toLowerCase();
+      const filtered = apps.filter(a => {
+        if(!filter) return true;
+        return a.appName.toLowerCase().includes(filter) || a.company.toLowerCase().includes(filter);
+      });
+
+      if(filtered.length === 0){
+        grid.appendChild(emptyTpl.content.cloneNode(true));
+        return;
+      }
+
+      filtered.forEach((app, idx) => {
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="title">
+            <span>${escapeHtml(app.appName)}</span>
+            <small class="small">${escapeHtml(app.field)}</small>
+          </div>
+
+          <div class="meta row">
+            <div>${escapeHtml(app.company)}</div>
+            <div class="small">${app.free === 'Yes' ? 'مجاني' : 'غير مجاني'}</div>
+          </div>
+
+          <div class="desc">${escapeHtml(app.description)}</div>
+
+          <div class="row" style="margin-top:6px">
+            <a href="${escapeAttr(app.website)}" target="_blank" class="small">${escapeHtml(app.website)}</a>
+            <div class="small">#${idx+1}</div>
+          </div>
+
+          <div class="actions">
+            <button class="btn outline" data-action="view" data-idx="${idx}">تفاصيل</button>
+            <button class="btn" style="background:#f59e0b;color:white" data-action="edit" data-idx="${idx}">تعديل</button>
+            <button class="btn danger" data-action="delete" data-idx="${idx}">حذف</button>
+          </div>
+        `;
+        // attach handlers
+        card.querySelectorAll('button').forEach(btn => {
+          btn.addEventListener('click', onCardAction);
+        });
+
+        grid.appendChild(card);
+      });
+    }
+
+    function onCardAction(e){
+      const btn = e.currentTarget;
+      const action = btn.getAttribute('data-action');
+      const idx = Number(btn.getAttribute('data-idx'));
+
+      if(action === 'view'){
+        const a = apps[idx];
+        alert(
+          `اسم التطبيق: ${a.appName}\n`+
+          `الشركة: ${a.company}\n`+
+          `الموقع: ${a.website}\n`+
+          `مجاني: ${a.free === 'Yes' ? 'نعم' : 'لا'}\n`+
+          `المجال: ${a.field}\n\n`+
+          `الوصف:\n${a.description}`
+        );
+      } else if(action === 'edit'){
+        openEdit(idx);
+      } else if(action === 'delete'){
+        if(confirm('هل أنت متأكد أنك تريد حذف هذا التطبيق؟')){
+          apps.splice(idx,1);
+          saveApps();
+          render();
+        }
+      }
+    }
+
+    // الفتح للتعديل
+    function openEdit(idx){
+      editingIndex = idx;
+      const a = apps[idx];
+      m_appName.value = a.appName;
+      m_company.value = a.company;
+      m_website.value = a.website;
+      m_free.value = a.free;
+      m_field.value = a.field;
+      m_description.value = a.description;
+      formErrors.textContent = '';
+      modal.style.display = 'flex';
+      // focus
+      setTimeout(()=> m_appName.focus(), 120);
+    }
+
+    // إغلاق المودال
+    function closeModalFn(){
+      modal.style.display = 'none';
+      editingIndex = null;
+    }
+
+    // حفظ التعديلات مع تحقق مماثل للصفحة الأولى
+    function validateAndSaveEdit(){
+      formErrors.textContent = '';
+      const appName = m_appName.value.trim();
+      const company = m_company.value.trim();
+      const website = m_website.value.trim();
+      const free = m_free.value;
+      const field = m_field.value;
+      const description = m_description.value.trim();
+
+      // validations
+      if(!/^[A-Za-z]+$/.test(appName)){
+        formErrors.textContent = 'اسم التطبيق يجب أن يحتوي أحرف إنجليزية فقط وبدون فراغات.';
+        return;
+      }
+      if(!/^[A-Za-z]+$/.test(company)){
+        formErrors.textContent = 'اسم الشركة يجب أن يحتوي أحرف إنجليزية فقط.';
+        return;
+      }
+      try{
+        new URL(website);
+      }catch(_){
+        formErrors.textContent = 'الموقع غير صالح. أدخل رابطاً صحيحاً.';
+        return;
+      }
+      if(free === ''){
+        formErrors.textContent = 'اختر إذا كان التطبيق مجانياً أم لا.';
+        return;
+      }
+      if(field === ''){
+        formErrors.textContent = 'اختر مجال الاستخدام.';
+        return;
+      }
+      if(description === ''){
+        formErrors.textContent = 'أدخل شرحاً مختصراً عن التطبيق.';
+        return;
+      }
+
+      // apply
+      apps[editingIndex] = { appName, company, website, free, field, description };
+      saveApps();
+      closeModalFn();
+      render();
+    }
+
+    // escape helpers to avoid XSS when rendering values (localStorage content might be untrusted)
+    function escapeHtml(s){
+      if(!s) return '';
+      return String(s)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#39;');
+    }
+    function escapeAttr(s){
+      return escapeHtml(s).replace(/"/g,'%22');
+    }
+
+    // الأحداث
+    q.addEventListener('input', render);
+    toAdd.addEventListener('click', ()=> location.href = 'ADD_APP.html');
+    clearAll.addEventListener('click', ()=>{
+      if(confirm('هل تريد حذف كل التطبيقات المخزنة محلياً؟')){
+        apps = [];
+        saveApps();
+        render();
+      }
+    });
+
+    closeModal.addEventListener('click', closeModalFn);
+    saveChanges.addEventListener('click', validateAndSaveEdit);
+
+    // إغلاق المودال بالنقر خارج الصندوق
+    modal.addEventListener('click', (e)=>{
+      if(e.target === modal) closeModalFn();
+    });
+
+    // تحميل وبناء الواجهة عند البداية
+    (function init(){
+      loadApps();
+      render();
+    })();
+
+    // للمطوّرين: تذكر أن add_app.html يخزن التطبيقات في localStorage تحت المفتاح "apps".
+  </script>
+</body>
+</html>
